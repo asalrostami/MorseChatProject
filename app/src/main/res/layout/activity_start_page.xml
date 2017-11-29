@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.example.asal.morsechatproject.StartPageActivity">
+
+
+    <TextView
+        android:id="@+id/tvLogo"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="119dp"
+        style="@style/logo"/>
+
+    <Button
+        android:id="@+id/btnHaveAccount_startPage"
+        style="@style/button"
+        android:layout_below="@+id/tvLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250dp"
+        android:text="Already Have An Account?"
+        />
+
+    <Button
+        android:id="@+id/btnNewAccount_startPage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnHaveAccount_startPage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="3dp"
+        android:text="Need New Account?"
+        style="@style/button"/>
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.example.asal.morsechatproject.RegisterActivity">
+
+    <include layout="@layout/app_bar_layout"
+             android:id="@+id/register_toolbar">
+
+    </include>
+    <TextView
+        android:id="@+id/tvLogo_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="86dp"
+        style="@style/logo"/>
+
+    <EditText
+        android:id="@+id/etName_register"
+        style="@style/multiText"
+        android:hint="Enter Name"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:layout_below="@+id/tvLogo_register"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"/>
+
+    <EditText
+        android:id="@+id/etEmail_register"
+        style="@style/multiText"
+        android:layout_alignEnd="@+id/etName_register"
+        android:layout_alignRight="@+id/etName_register"
+        android:layout_below="@+id/etName_register"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter Email"
+        android:inputType="textMultiLine|textEmailAddress"/>
+
+    <EditText
+        android:id="@+id/etPassword_register"
+        style="@style/multiText"
+        android:layout_alignLeft="@+id/etEmail_register"
+        android:layout_alignStart="@+id/etEmail_register"
+        android:layout_below="@+id/etEmail_register"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:hint="Enter Password"
+        android:inputType="textMultiLine|textPassword"/>
+
+    <Button
+        android:id="@+id/btnCreateAccount_register"
+        style="@style/button"
+        android:text="Create Account"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp"/>
+</RelativeLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.example.asal.morsechatproject.LoginActivity">
+
+    <include layout="@layout/app_bar_layout"
+             android:id="@+id/login_toolbar">
+
+    </include>
+    <TextView
+        android:id="@+id/tvLogo_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="86dp"
+        style="@style/logo"/>
+
+    <EditText
+        android:id="@+id/etEmail_login"
+        style="@style/multiText"
+        android:hint="Enter Email"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:layout_marginTop="128dp"
+        android:layout_below="@+id/tvLogo_login"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:id="@+id/etPassword_login"
+        style="@style/multiText"
+        android:hint="Enter Password"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:layout_marginTop="68dp"
+        android:layout_alignTop="@+id/etEmail_login"
+        android:layout_alignLeft="@+id/etEmail_login"
+        android:layout_alignStart="@+id/etEmail_login"/>
+
+    <Button
+        android:id="@+id/btnSignin_login"
+        style="@style/button"
+        android:text="Sign in"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp"/>
+
+</RelativeLayout>
