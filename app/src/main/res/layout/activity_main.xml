@@ -21,7 +21,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="241dp"
-        android:text="Welcome to Main Activity33"
+        android:text="Welcome to Main Activity"
         android:textAlignment="center"
         android:textSize="24sp"
         android:textStyle="bold"/>
