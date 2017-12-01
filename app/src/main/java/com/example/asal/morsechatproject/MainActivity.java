@@ -1,20 +1,27 @@
 package com.example.asal.morsechatproject;
 
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.asal.morsechatproject.Model.TabsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-
     private FirebaseAuth mFirebaseAuth;
+
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private TabsPagerAdapter mTabsPagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +33,13 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("Morse Chat");
 
+        mViewPager = (ViewPager)findViewById(R.id.main_tabs_pager);
+
+        mTabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mTabsPagerAdapter);
+
+        mTabLayout  = (TabLayout) findViewById(R.id.main_tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
 
 
     }
