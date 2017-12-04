@@ -24,23 +24,23 @@
     <EditText
         android:id="@+id/etEmail_login"
         style="@style/multiText"
-        android:hint="Enter Email"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="128dp"
         android:layout_below="@+id/tvLogo_login"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="128dp"
+        android:ems="10"
+        android:hint="Enter Email"
+        android:inputType="textMultiLine|textEmailAddress"/>
 
     <EditText
         android:id="@+id/etPassword_login"
         style="@style/multiText"
-        android:hint="Enter Password"
-        android:ems="10"
-        android:inputType="textMultiLine"
-        android:layout_marginTop="68dp"
-        android:layout_alignTop="@+id/etEmail_login"
         android:layout_alignLeft="@+id/etEmail_login"
-        android:layout_alignStart="@+id/etEmail_login"/>
+        android:layout_alignStart="@+id/etEmail_login"
+        android:layout_alignTop="@+id/etEmail_login"
+        android:layout_marginTop="68dp"
+        android:ems="10"
+        android:hint="Enter Password"
+        android:inputType="textMultiLine|textPassword"/>
 
     <Button
         android:id="@+id/btnSignin_login"
