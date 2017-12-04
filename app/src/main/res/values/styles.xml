@@ -31,7 +31,7 @@
     <style name="multiText">
         <item name="android:layout_width">310dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:padding">5dp</item>
         <item name="android:textColor">@color/colorLogo</item>
         <item name="android:fontFamily">casual</item>
         <item name="android:textSize">18sp</item>

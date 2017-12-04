@@ -22,11 +22,15 @@
         </activity>
         <activity android:name=".StartPageActivity">
         </activity>
-        <activity android:name=".RegisterActivity"
-                  android:parentActivityName=".StartPageActivity">
+        <activity
+            android:name=".RegisterActivity"
+            android:parentActivityName=".StartPageActivity">
         </activity>
-        <activity android:name=".LoginActivity"
-                  android:parentActivityName=".StartPageActivity">
+        <activity
+            android:name=".LoginActivity"
+            android:parentActivityName=".StartPageActivity">
+        </activity>
+        <activity android:name=".SettingsActivity">
         </activity>
     </application>
 
