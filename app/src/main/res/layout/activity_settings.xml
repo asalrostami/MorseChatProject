@@ -14,14 +14,14 @@
         android:src="@drawable/defaultimage1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
-        android:id="@+id/settings_profile_image"/>
+        android:id="@+id/settings_profile_circleImage"/>
 
     <TextView
         android:id="@+id/tvUserName_settings"
         style="@style/multiText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/settings_profile_image"
+        android:layout_below="@+id/settings_profile_circleImage"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp"
         android:text="UserName"/>
