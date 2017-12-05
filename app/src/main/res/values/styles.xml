@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="logo">
 
         <item name="android:layout_width">wrap_content</item>
@@ -18,6 +19,7 @@
         <item name="android:fontFamily">cursive</item>
 
     </style>
+
     <style name="button">
         <item name="android:layout_width">330dp</item>
         <item name="android:layout_height">50dp</item>
@@ -37,6 +39,10 @@
         <item name="android:textSize">18sp</item>
 
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 
 </resources>

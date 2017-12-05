@@ -20,12 +20,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "ERROR";
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabaseReference;
+
 
     private Toolbar mToolbar;
     private EditText mEditTextName, mEditTextEmail, mEditTextPassword;
@@ -69,7 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void RegisterAccount(String name_register, String email_register, String password_register) {
+    private void RegisterAccount(final String name_register, String email_register, String password_register) {
         if (TextUtils.isEmpty(name_register)) {
             brain.showToast("Please Enter Name!", RegisterActivity.this);
         } else if (TextUtils.isEmpty(email_register)) {
@@ -89,10 +93,26 @@ public class RegisterActivity extends AppCompatActivity {
 
                             if(task.isSuccessful())
                             {
-                                Intent mainIntent = new Intent(RegisterActivity.this,MainActivity.class);
-                                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(mainIntent);
-                                finish();
+                                String current_user_id = mAuth.getCurrentUser().getUid();
+                                mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(current_user_id);
+                                mDatabaseReference.child("user_name").setValue(name_register);
+                                mDatabaseReference.child("user_status").setValue("user_status_default");
+                                mDatabaseReference.child("user_image").setValue("default_profile_image");
+                                mDatabaseReference.child("user_tumb_image").setValue("default_image")
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful())
+                                        {
+                                            Intent mainIntent = new Intent(RegisterActivity.this,MainActivity.class);
+                                            mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                            startActivity(mainIntent);
+                                            finish();
+                                        }
+
+                                    }
+                                });
+
                             }
                             else
                             {
