@@ -49,6 +49,8 @@ public class SettingsActivity extends AppCompatActivity {
                 String image = dataSnapshot.child("user_image").getValue().toString();
                 String thumb_image = dataSnapshot.child("user_tumb_image").getValue().toString();
 
+
+
                 mTextViewUserName.setText(name);
                 mTextViewUserStatus.setText(status);
 
