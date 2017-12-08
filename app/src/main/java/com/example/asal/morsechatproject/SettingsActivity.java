@@ -1,7 +1,10 @@
 package com.example.asal.morsechatproject;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,6 +18,9 @@ import com.google.firebase.database.ValueEventListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private static final String TAG = "ERROR";
+    private static final int gallery_pick = 1;
 
     private CircleImageView mCircleImageViewProfileImage;
     private TextView mTextViewUserName,mTextViewUserStatus;
@@ -37,24 +43,40 @@ public class SettingsActivity extends AppCompatActivity {
         mTextViewUserName = (TextView)findViewById(R.id.tvUserName_settings);
         mTextViewUserStatus = (TextView)findViewById(R.id.tvStatus_settings);
         mButtonChangeProfileImage = (Button)findViewById(R.id.btn_changeImage_settings);
+        mButtonChangeProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //open gallery of phone
+                Intent galleryIntent = new Intent();
+                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent,gallery_pick);
+            }
+        });
         mButtonChangeStatus = (Button)findViewById(R.id.btn_changeStatus_settings);
 
         //retrieve information from database
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                String name = dataSnapshot.child("user_name").getValue().toString();
-                String status = dataSnapshot.child("user_status").getValue().toString();
-                String image = dataSnapshot.child("user_image").getValue().toString();
-                String thumb_image = dataSnapshot.child("user_tumb_image").getValue().toString();
+                if (dataSnapshot.exists()) {
+                    // Log.e(TAG, "onComplete: Failed=" + dataSnapshot.getValue().toString());
+                    String name = dataSnapshot.child("user_name").getValue().toString();
+                    String status = dataSnapshot.child("user_status").getValue().toString();
+                    String image = dataSnapshot.child("user_image").getValue().toString();
+                    String thumb_image = dataSnapshot.child("user_tumb_image").getValue().toString();
 
 
+                    mTextViewUserName.setText(name);
+                    mTextViewUserStatus.setText(status);
 
-                mTextViewUserName.setText(name);
-                mTextViewUserStatus.setText(status);
-
-
+                }
+                else
+                {
+                    Log.e(TAG, "onComplete: Failed=");
+                }
 
             }
 
