@@ -2,19 +2,26 @@ package com.example.asal.morsechatproject;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -31,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseReference;
+    private StorageReference mStorageReference;
 
 
 
@@ -43,6 +51,9 @@ public class SettingsActivity extends AppCompatActivity {
         String online_user_id = mAuth.getCurrentUser().getUid();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(online_user_id);
+
+        mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile_Images");
+
 
         mCircleImageViewProfileImage = (CircleImageView)findViewById(R.id.settings_profile_circleImage);
         mTextViewUserName = (TextView)findViewById(R.id.tvUserName_settings);
@@ -71,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 if (dataSnapshot.exists()) {
+                    //fetching information from database
                     // Log.e(TAG, "onComplete: Failed=" + dataSnapshot.getValue().toString());
                     String name = dataSnapshot.child("user_name").getValue().toString();
                     String status = dataSnapshot.child("user_status").getValue().toString();
@@ -100,6 +112,8 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+
         if(requestCode == gallery_pick && resultCode == RESULT_OK && data!=null)
         {
 
@@ -107,7 +121,39 @@ public class SettingsActivity extends AppCompatActivity {
             // start picker to get image for cropping and then use the image in cropping activity
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
                     .start(this);
+        }
+        // get crop result
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK)
+            {
+                Uri resultUri = result.getUri();
+                String user_id = mAuth.getCurrentUser().getUid();
+                StorageReference filePath = mStorageReference.child(user_id + ".jpg");
+                filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
+                    {
+                        if(task.isSuccessful())
+                        {
+                            Toast.makeText(SettingsActivity.this,"Saving your profile image",Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            Toast.makeText(SettingsActivity.this,"ERROR occured,while uploading your profile pic",Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
+
+                        }
+
+                    }
+                });
+
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
         }
     }
 
