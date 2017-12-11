@@ -93,7 +93,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                     mTextViewUserName.setText(name);
                     mTextViewUserStatus.setText(status);
-                    Picasso.with(SettingsActivity.this).load(image).into(mCircleImageViewProfileImage);
+                    Picasso.with(SettingsActivity.this).load(image).resize(600, 600)
+                            .centerCrop().into(mCircleImageViewProfileImage);
 
                 }
                 else
