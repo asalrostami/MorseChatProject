@@ -48,6 +48,7 @@ public class StatusActivity extends AppCompatActivity {
         mButtonStatus = (Button)findViewById(R.id.btn_ChangeStatus_Status);
         mEditTextStatus = (EditText)findViewById(R.id.etStatus_status);
 
+        mEditTextStatus.setText(getIntent().getExtras().get("user_status").toString());
         mButtonStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)

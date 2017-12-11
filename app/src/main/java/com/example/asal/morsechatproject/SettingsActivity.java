@@ -79,7 +79,9 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
+                String old_status = mTextViewUserStatus.getText().toString();
                 Intent statusIntent = new Intent(SettingsActivity.this,StatusActivity.class);
+                statusIntent.putExtra("user_status",old_status);
                 startActivity(statusIntent);
 
             }
