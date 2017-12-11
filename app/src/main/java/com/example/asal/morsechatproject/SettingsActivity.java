@@ -75,6 +75,15 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         mButtonChangeStatus = (Button)findViewById(R.id.btn_changeStatus_settings);
+        mButtonChangeStatus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent statusIntent = new Intent(SettingsActivity.this,StatusActivity.class);
+                startActivity(statusIntent);
+
+            }
+        });
 
         //retrieve information from database
         mDatabaseReference.addValueEventListener(new ValueEventListener() {
