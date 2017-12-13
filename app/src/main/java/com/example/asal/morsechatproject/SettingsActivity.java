@@ -226,6 +226,7 @@ public class SettingsActivity extends AppCompatActivity {
                                        update_user_data.put("user_image",downloadUrl);
                                        update_user_data.put("user_tumb_image",thumb_downloadUrl);
 
+                                       //update both images in database with using Map
                                        mDatabaseReference.updateChildren(update_user_data)
                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                    @Override

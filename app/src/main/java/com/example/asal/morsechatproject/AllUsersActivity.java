@@ -60,7 +60,7 @@ public class AllUsersActivity extends AppCompatActivity {
 
                 viewHolder.setUser_name(model.getUser_name());
                 viewHolder.setUser_status(model.getUser_status());
-                viewHolder.setUser_image(getApplicationContext(),model.getUser_image());
+                viewHolder.setUser_tumb_image(getApplicationContext(),model.getUser_tumb_image());
             }
         };
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
@@ -82,10 +82,10 @@ public class AllUsersActivity extends AppCompatActivity {
             TextView status = (TextView)mView.findViewById(R.id.tv_allUsers_status);
             status.setText(user_status);
         }
-        public void setUser_image(Context context,String user_image) {
-            CircleImageView image = (CircleImageView)mView.findViewById(R.id.allUsers_profile_image);
-            Picasso.with(context).load(user_image).resize(600, 600)
-                    .centerCrop().into(image);
+        public void setUser_tumb_image(Context context,String user_thumb_image) {
+            CircleImageView thumb_image = (CircleImageView)mView.findViewById(R.id.allUsers_profile_image);
+            Picasso.with(context).load(user_thumb_image).resize(600, 600)
+                    .centerCrop().into(thumb_image);
         }
     }
 }
