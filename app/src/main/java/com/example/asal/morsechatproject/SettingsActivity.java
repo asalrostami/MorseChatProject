@@ -1,6 +1,8 @@
 package com.example.asal.morsechatproject;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -26,7 +28,14 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -41,12 +50,20 @@ public class SettingsActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseReference;
     private StorageReference mStorageReference;
 
+    private StorageReference mThumbImageStorageReference;
+
+    Bitmap thumb_bitmap = null;
+
+    private ProgressDialog mProgressDialog;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        mProgressDialog = new ProgressDialog(this);
 
         mAuth = FirebaseAuth.getInstance();
         String online_user_id = mAuth.getCurrentUser().getUid();
@@ -55,6 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile_Images");
 
+        mThumbImageStorageReference = FirebaseStorage.getInstance().getReference().child("Thumb_Images");
 
         mCircleImageViewProfileImage = (CircleImageView)findViewById(R.id.settings_profile_circleImage);
         mTextViewUserName = (TextView)findViewById(R.id.tvUserName_settings);
@@ -104,8 +122,11 @@ public class SettingsActivity extends AppCompatActivity {
 
                     mTextViewUserName.setText(name);
                     mTextViewUserStatus.setText(status);
-                    Picasso.with(SettingsActivity.this).load(image).resize(600, 600)
-                            .centerCrop().into(mCircleImageViewProfileImage);
+                    if(!image.equals("default_profile_image"))
+                    {
+                        Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimage1).resize(600, 600)
+                                .centerCrop().into(mCircleImageViewProfileImage);
+                    }
 
                 }
                 else
@@ -143,9 +164,41 @@ public class SettingsActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK)
             {
+                mProgressDialog.setTitle("Updating Profile Image");
+                mProgressDialog.setMessage("Please Wait ....");
+                mProgressDialog.show();
+
+                //uri of image which user chose
                 Uri resultUri = result.getUri();
+
+                //save image path
+                File thumb_filePathUri = new File(resultUri.getPath());
+
                 String user_id = mAuth.getCurrentUser().getUid();
+
+                //compress the image by library -> implementation 'id.zelory:compressor:2.1.0'
+
+                try
+                {
+                    thumb_bitmap = new Compressor(this)
+                            .setMaxWidth(200).setMaxHeight(200)
+                            .setQuality(50).compressToBitmap(thumb_filePathUri);
+
+                }catch (IOException e)
+                {
+
+                    e.printStackTrace();
+                }
+
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                thumb_bitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
+                final byte[] thumb_byte = byteArrayOutputStream.toByteArray();
+
+
+
                 StorageReference filePath = mStorageReference.child(user_id + ".jpg");
+                final StorageReference thumb_filePath = mThumbImageStorageReference.child(user_id + ".jpg");
+
                 filePath.putFile(resultUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task)
@@ -153,24 +206,49 @@ public class SettingsActivity extends AppCompatActivity {
                         if(task.isSuccessful())
                         {
                             Toast.makeText(SettingsActivity.this,"Saving your profile image",Toast.LENGTH_SHORT).show();
+
+
                             //save imageUrl into database of firebase ("user_image")
-                            String downloadUrl = task.getResult().getDownloadUrl().toString();
-                            mDatabaseReference.child("user_image").setValue(downloadUrl)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task)
-                                {
-
-                                    Toast.makeText(SettingsActivity.this,"Profile Image Uploaded Successfully ...",Toast.LENGTH_SHORT).show();
+                           final String downloadUrl = task.getResult().getDownloadUrl().toString();
 
 
-                                }
-                            });
+                           //save thumb image into the database
+                           UploadTask uploadTask = thumb_filePath.putBytes(thumb_byte);
+                           uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                               @Override
+                               public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> thumb_task)
+                               {
+
+                                   String thumb_downloadUrl = thumb_task.getResult().getDownloadUrl().toString();
+                                   if(thumb_task.isSuccessful())
+                                   {
+                                       Map update_user_data = new HashMap();
+                                       update_user_data.put("user_image",downloadUrl);
+                                       update_user_data.put("user_tumb_image",thumb_downloadUrl);
+
+                                       mDatabaseReference.updateChildren(update_user_data)
+                                               .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                   @Override
+                                                   public void onComplete(@NonNull Task<Void> task)
+                                                   {
+
+                                                       Toast.makeText(SettingsActivity.this,"Profile Image Uploaded Successfully ...",Toast.LENGTH_SHORT).show();
+                                                       mProgressDialog.dismiss();
+
+
+                                                   }
+                                               });
+                                   }
+                               }
+                           });
+
+
                         }
                         else
                         {
                             Toast.makeText(SettingsActivity.this,"ERROR occured,while uploading your profile pic",Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
+                            mProgressDialog.dismiss();
 
                         }
 
