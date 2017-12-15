@@ -122,7 +122,9 @@ public class SettingsActivity extends AppCompatActivity {
 
                     mTextViewUserName.setText(name);
                     mTextViewUserStatus.setText(status);
-                    if(!image.equals("default_profile_image"))
+                    //2131165298
+                    //if(!image.equals("default_profile_image"))
+                    if(!image.equals("2131165298"))
                     {
                         Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimage1).resize(600, 600)
                                 .centerCrop().into(mCircleImageViewProfileImage);

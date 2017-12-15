@@ -86,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
             progressDialog.setTitle("Creating New Account");
             progressDialog.setMessage("Please Wait ....");
             progressDialog.show();
+            //create a new user id in the Auth firebase
             mAuth.createUserWithEmailAndPassword(email_register, password_register)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -93,12 +94,15 @@ public class RegisterActivity extends AppCompatActivity {
 
                             if(task.isSuccessful())
                             {
+                                //add information into database firebase
                                 String current_user_id = mAuth.getCurrentUser().getUid();
                                 mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(current_user_id);
                                 mDatabaseReference.child("user_name").setValue(name_register);
                                 mDatabaseReference.child("user_status").setValue("user_status_default");
-                                mDatabaseReference.child("user_image").setValue("default_profile_image");
-                                mDatabaseReference.child("user_tumb_image").setValue("default_image")
+                                mDatabaseReference.child("user_image").setValue(String.valueOf(R.drawable.defaultimage1));
+                                //"default_profile_image"
+                                mDatabaseReference.child("user_tumb_image").setValue(String.valueOf(R.drawable.defaultimage1))
+//                                        //"default_image"
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

@@ -84,8 +84,12 @@ public class AllUsersActivity extends AppCompatActivity {
         }
         public void setUser_tumb_image(Context context,String user_thumb_image) {
             CircleImageView thumb_image = (CircleImageView)mView.findViewById(R.id.allUsers_profile_image);
-            Picasso.with(context).load(user_thumb_image).resize(600, 600)
-                    .centerCrop().into(thumb_image);
+            if(!user_thumb_image.equals("2131165298"))
+            {
+                Picasso.with(context).load(user_thumb_image).resize(600, 600)
+                        .centerCrop().into(thumb_image);
+            }
+
         }
     }
 }
