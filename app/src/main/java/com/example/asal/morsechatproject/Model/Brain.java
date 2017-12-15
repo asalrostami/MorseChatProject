@@ -1,6 +1,8 @@
 package com.example.asal.morsechatproject.Model;
 
 import android.content.Context;
+import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 /**
@@ -12,6 +14,7 @@ public class Brain {
     {
         Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
     }
+
 
 
 

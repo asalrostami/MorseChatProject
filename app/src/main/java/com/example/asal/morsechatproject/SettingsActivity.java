@@ -159,7 +159,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             Uri imageUri = data.getData();
             // start picker to get image for cropping and then use the image in cropping activity
-            CropImage.activity()
+            CropImage.activity(imageUri)
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1,1)
                     .start(this);
@@ -267,7 +267,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
-   
+
 
 
 
