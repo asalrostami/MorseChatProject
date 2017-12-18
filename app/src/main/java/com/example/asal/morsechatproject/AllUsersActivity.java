@@ -111,7 +111,7 @@ public class AllUsersActivity extends AppCompatActivity {
             if(!user_thumb_image.equals("2131165298"))
             {
                 Picasso.with(context).load(user_thumb_image).resize(600, 600)
-                        .centerCrop().into(thumb_image);
+                        .centerCrop().placeholder(R.drawable.defaultimage1).into(thumb_image);
             }
 
         }
