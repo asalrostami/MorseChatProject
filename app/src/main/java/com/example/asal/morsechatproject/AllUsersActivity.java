@@ -3,6 +3,7 @@ package com.example.asal.morsechatproject;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -37,6 +38,9 @@ public class AllUsersActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView)findViewById(R.id.allUsers_list);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+
 
 
     }
@@ -63,6 +67,8 @@ public class AllUsersActivity extends AppCompatActivity {
                 viewHolder.setUser_tumb_image(getApplicationContext(),model.getUser_tumb_image());
             }
         };
+        mRecyclerView.setAdapter(firebaseRecyclerAdapter);
+        // set the adapter
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
     }
 
