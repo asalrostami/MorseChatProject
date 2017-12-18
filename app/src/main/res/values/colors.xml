@@ -6,5 +6,6 @@
     <color name="colorAccent">#f47e54</color>
     <color name="colorLogo">#ffffff</color>
     <color name="colorButtonText">#f47e54</color>
+    <color name="background_profile">#313335</color>
 
 </resources>

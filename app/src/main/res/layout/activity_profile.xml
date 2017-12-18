@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_profile"
+    tools:context="com.example.asal.morsechatproject.ProfileActivity">
+
+    <ImageView
+        android:id="@+id/visit_userImage_profile"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:src="@drawable/defaultimage1"/>
+
+    <TextView
+        android:id="@+id/tv_username_profile"
+       style="@style/multiText"
+        android:gravity="center"
+        android:layout_below="@+id/visit_userImage_profile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="34dp"
+        android:text="Display User Name"/>
+
+    <TextView
+        android:id="@+id/tv_status_profile"
+        style="@style/multiText_status"
+        android:layout_below="@+id/tv_username_profile"
+        android:layout_centerHorizontal="true"
+        android:text="Display status"/>
+
+    <Button
+        android:id="@+id/btn_sendRequest_profile"
+        style="@style/button"
+        android:layout_below="@+id/tv_status_profile"
+        android:layout_centerHorizontal="true"
+      android:layout_marginTop="50dp"
+        android:text="Send Friend Request"/>
+
+    <Button
+        android:id="@+id/btn_declineRequest_profile"
+        style="@style/button"
+        android:layout_below="@+id/btn_sendRequest_profile"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="Decline Friend Request"/>
+</RelativeLayout>

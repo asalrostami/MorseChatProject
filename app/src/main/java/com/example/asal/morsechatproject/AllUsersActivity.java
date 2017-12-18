@@ -1,6 +1,7 @@
 package com.example.asal.morsechatproject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -65,12 +66,23 @@ public class AllUsersActivity extends AppCompatActivity {
                 )
         {
             @Override
-            protected void populateViewHolder(AllUsersViewHolder viewHolder, AllUsers model, int position)
+            protected void populateViewHolder(AllUsersViewHolder viewHolder, AllUsers model, final int position)
             {
 
                 viewHolder.setUser_name(model.getUser_name());
                 viewHolder.setUser_status(model.getUser_status());
                 viewHolder.setUser_tumb_image(getApplicationContext(),model.getUser_tumb_image());
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view)
+                    {
+                        //retrieve the user's unique_id from database
+                        String visit_user_id = getRef(position).getKey();
+                        Intent profileIntent = new Intent(AllUsersActivity.this,ProfileActivity.class);
+                        profileIntent.putExtra("visit_user_id",visit_user_id);
+                        startActivity(profileIntent);
+                    }
+                });
             }
         };
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
