@@ -103,8 +103,43 @@ public class ProfileActivity extends AppCompatActivity {
                 {
                     mButtonSendRequestToAPerson();
                 }
+                else if(CURRENT_STATE.equals("request_sent"))
+                {
+                    CancelFriendRequest();
+                }
             }
         });
+    }
+
+
+
+    private void CancelFriendRequest()
+    {
+
+        friendsRequestRefrence.child(sender_user_id).child(receiver_user_id).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if(task.isSuccessful())
+                        {
+                            friendsRequestRefrence.child(receiver_user_id).child(sender_user_id).removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> receiveTask)
+                                        {
+
+                                            if(receiveTask.isSuccessful())
+                                            {
+                                                mButtonSendReq.setEnabled(true);
+                                                CURRENT_STATE = "not_friends";
+                                                mButtonSendReq.setText("Send Friend Request");
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void mButtonSendRequestToAPerson()
