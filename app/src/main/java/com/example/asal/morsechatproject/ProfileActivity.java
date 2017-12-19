@@ -101,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
                 mButtonSendReq.setEnabled(false);
                 if(CURRENT_STATE.equals("not_friends"))
                 {
-                    mButtonSendRequestToAPerson();
+                    SendRequestToAPerson();
                 }
                 else if(CURRENT_STATE.equals("request_sent"))
                 {
@@ -142,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
                 });
     }
 
-    private void mButtonSendRequestToAPerson()
+    private void SendRequestToAPerson()
     {
 
         friendsRequestRefrence.child(sender_user_id).child(receiver_user_id)
