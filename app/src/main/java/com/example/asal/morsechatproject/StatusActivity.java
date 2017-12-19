@@ -41,6 +41,7 @@ public class StatusActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         String user_id = mAuth.getCurrentUser().getUid();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(user_id);
+        mDatabaseReference.keepSynced(true);
 
         mProgressDialog = new ProgressDialog(this);
         mToolbar = (Toolbar)findViewById(R.id.status_app_bar);

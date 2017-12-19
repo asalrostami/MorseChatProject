@@ -27,6 +27,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -72,6 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
         String online_user_id = mAuth.getCurrentUser().getUid();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(online_user_id);
+        mDatabaseReference.keepSynced(true);
 
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile_Images");
 
@@ -119,7 +122,7 @@ public class SettingsActivity extends AppCompatActivity {
                     // Log.e(TAG, "onComplete: Failed=" + dataSnapshot.getValue().toString());
                     String name = dataSnapshot.child("user_name").getValue().toString();
                     String status = dataSnapshot.child("user_status").getValue().toString();
-                    String image = dataSnapshot.child("user_image").getValue().toString();
+                    final String image = dataSnapshot.child("user_image").getValue().toString();
                     String thumb_image = dataSnapshot.child("user_tumb_image").getValue().toString();
 
 
@@ -129,8 +132,25 @@ public class SettingsActivity extends AppCompatActivity {
                     //if(!image.equals("default_profile_image"))
                     if(!image.equals("2131165298"))
                     {
-                        Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimage1).resize(600, 600)
-                                .centerCrop().into(mCircleImageViewProfileImage);
+
+                        //for working well in offline using library -> implementation 'com.squareup.okhttp:okhttp:2.5.0'
+                        Picasso.with(SettingsActivity.this).load(image).networkPolicy(NetworkPolicy.OFFLINE).placeholder(R.drawable.defaultimage1).resize(600, 600)
+                                .centerCrop().into(mCircleImageViewProfileImage, new Callback() {
+                            @Override
+                            public void onSuccess()
+                            {
+
+                            }
+
+                            @Override
+                            public void onError()
+                            {
+
+                                Picasso.with(SettingsActivity.this).load(image).placeholder(R.drawable.defaultimage1).resize(600, 600)
+                               .centerCrop().into(mCircleImageViewProfileImage);
+                            }
+                        });
+
                     }
 
                 }

@@ -43,15 +43,18 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         friendsRequestReference = FirebaseDatabase.getInstance().getReference().child("Friend_Requests");
+        friendsRequestReference.keepSynced(true);
 
         mAuth = FirebaseAuth.getInstance();
         sender_user_id = mAuth.getCurrentUser().getUid();
 
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabaseReference.keepSynced(true);
         receiver_user_id = getIntent().getExtras().get("visit_user_id").toString();
 
         friendReference = FirebaseDatabase.getInstance().getReference().child("Friends");
+        friendReference.keepSynced(true);
 
         mTextViewUserName = (TextView)findViewById(R.id.tv_username_profile);
         mTextViewStatus = (TextView)findViewById(R.id.tv_status_profile);

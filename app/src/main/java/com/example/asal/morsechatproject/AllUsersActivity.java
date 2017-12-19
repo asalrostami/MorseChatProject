@@ -16,6 +16,8 @@ import com.example.asal.morsechatproject.Model.MyDividerItemDecoration;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -31,6 +33,8 @@ public class AllUsersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_all_users);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        //allowed to work offline
+        mDatabaseReference.keepSynced(true);
 
         mToolbar = (Toolbar)findViewById(R.id.allUsers_app_bar);
         setSupportActionBar(mToolbar);
@@ -106,12 +110,27 @@ public class AllUsersActivity extends AppCompatActivity {
             TextView status = (TextView)mView.findViewById(R.id.tv_allUsers_status);
             status.setText(user_status);
         }
-        public void setUser_tumb_image(Context context,String user_thumb_image) {
-            CircleImageView thumb_image = (CircleImageView)mView.findViewById(R.id.allUsers_profile_image);
+        public void setUser_tumb_image(final Context context,final String user_thumb_image) {
+           final CircleImageView thumb_image = (CircleImageView)mView.findViewById(R.id.allUsers_profile_image);
             if(!user_thumb_image.equals("2131165298"))
             {
-                Picasso.with(context).load(user_thumb_image).resize(600, 600)
-                        .centerCrop().placeholder(R.drawable.defaultimage1).into(thumb_image);
+
+                Picasso.with(context).load(user_thumb_image).networkPolicy(NetworkPolicy.OFFLINE).resize(600, 600)
+                  .centerCrop().placeholder(R.drawable.defaultimage1).into(thumb_image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError()
+                    {
+
+                        Picasso.with(context).load(user_thumb_image).resize(600, 600)
+                          .centerCrop().placeholder(R.drawable.defaultimage1).into(thumb_image);
+                    }
+                });
+
             }
 
         }
