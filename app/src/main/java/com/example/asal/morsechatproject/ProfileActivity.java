@@ -93,6 +93,28 @@ public class ProfileActivity extends AppCompatActivity {
                                    mButtonSendReq.setText("Accept Friend Request");
                                }
                            }
+
+                       }
+                       else
+                       {
+                           friendReference.child(sender_user_id)
+                                   .addListenerForSingleValueEvent(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(DataSnapshot dataSnapshot)
+                                       {
+                                           if(dataSnapshot.hasChild(receiver_user_id))
+                                           {
+                                               CURRENT_STATE = "friends";
+                                               mButtonSendReq.setText("UnFriend This Person");
+                                           }
+
+                                       }
+
+                                       @Override
+                                       public void onCancelled(DatabaseError databaseError) {
+
+                                       }
+                                   });
                        }
                     }
 
@@ -127,8 +149,40 @@ public class ProfileActivity extends AppCompatActivity {
 
                     AcceptFriendRequest();
                 }
+                else if(CURRENT_STATE.equals("friends"))
+                {
+                    UnFriendAFried();
+                }
             }
         });
+    }
+
+    private void UnFriendAFried()
+    {
+
+        friendReference.child(sender_user_id).child(receiver_user_id).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if(task.isSuccessful())
+                        {
+                            friendReference.child(receiver_user_id).child(sender_user_id).removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> receiverTask)
+                                        {
+                                            if(receiverTask.isSuccessful())
+                                            {
+                                                mButtonSendReq.setEnabled(true);
+                                                CURRENT_STATE = "not_friends";
+                                                mButtonSendReq.setText("Send Friend Request");
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void AcceptFriendRequest()
@@ -136,7 +190,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         //get current date with custom format
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
         final String saveCurrentDate = currentDate.format(calendar.getTime());
 
         friendReference.child(sender_user_id).child(receiver_user_id).setValue(saveCurrentDate)
