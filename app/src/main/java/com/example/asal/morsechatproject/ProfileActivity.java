@@ -131,30 +131,39 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        mButtonSendReq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                mButtonSendReq.setEnabled(false);
-                if(CURRENT_STATE.equals("not_friends"))
-                {
-                    SendRequestToAPerson();
-                }
-                else if(CURRENT_STATE.equals("request_sent"))
-                {
-                    CancelFriendRequest();
-                }
-                else if(CURRENT_STATE.equals("request_received"))
-                {
+      if(!sender_user_id.equals(receiver_user_id))
+      {
+          mButtonSendReq.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view)
+              {
+                  mButtonSendReq.setEnabled(false);
+                  if(CURRENT_STATE.equals("not_friends"))
+                  {
+                      SendRequestToAPerson();
+                  }
+                  else if(CURRENT_STATE.equals("request_sent"))
+                  {
+                      CancelFriendRequest();
+                  }
+                  else if(CURRENT_STATE.equals("request_received"))
+                  {
 
-                    AcceptFriendRequest();
-                }
-                else if(CURRENT_STATE.equals("friends"))
-                {
-                    UnFriendAFried();
-                }
-            }
-        });
+                      AcceptFriendRequest();
+                  }
+                  else if(CURRENT_STATE.equals("friends"))
+                  {
+                      UnFriendAFried();
+                  }
+              }
+          });
+      }
+      else
+      {
+          mButtonSendReq.setVisibility(View.INVISIBLE);
+          mButtonDeclineReq.setVisibility(View.INVISIBLE);
+
+      }
     }
 
     private void UnFriendAFried()
