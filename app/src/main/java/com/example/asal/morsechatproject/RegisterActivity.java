@@ -22,6 +22,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -94,12 +95,16 @@ public class RegisterActivity extends AppCompatActivity {
 
                             if(task.isSuccessful())
                             {
+                                //add device token to the database
+                                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
                                 //add information into database firebase
                                 String current_user_id = mAuth.getCurrentUser().getUid();
                                 mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(current_user_id);
                                 mDatabaseReference.child("user_name").setValue(name_register);
                                 mDatabaseReference.child("user_status").setValue("user_status_default");
                                 mDatabaseReference.child("user_image").setValue(String.valueOf(R.drawable.defaultimage1));
+                                mDatabaseReference.child("device_token").setValue(deviceToken);
                                 //"default_profile_image"
                                 mDatabaseReference.child("user_tumb_image").setValue(String.valueOf(R.drawable.defaultimage1))
 //                                        //"default_image"

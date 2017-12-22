@@ -21,6 +21,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button mButtonLogin;
     private ProgressDialog mProgressDialog;
 
+    private DatabaseReference mDatabaseReference;
+
 
     private static final String TAG = "ERROR";
 
@@ -41,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mToolbar = (Toolbar)findViewById(R.id.login_toolbar);
         setSupportActionBar(mToolbar);
@@ -88,10 +94,24 @@ public class LoginActivity extends AppCompatActivity {
                     if(task.isSuccessful())
                     {
 
-                        Intent mainIntent = new Intent(LoginActivity.this,MainActivity.class);
-                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(mainIntent);
-                        finish();
+                        //add device token to the database
+                        String online_user_id = mAuth.getCurrentUser().getUid();
+                        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+
+                        mDatabaseReference.child(online_user_id).child("device_token").setValue(deviceToken)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task)
+                                    {
+                                        Intent mainIntent = new Intent(LoginActivity.this,MainActivity.class);
+                                        mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(mainIntent);
+                                        finish();
+
+                                    }
+                                });
+
+
                     }
                     else
                     {
