@@ -12,6 +12,8 @@
              android:id="@+id/register_toolbar">
 
     </include>
+
+
     <TextView
         android:id="@+id/tvLogo_register"
         android:layout_width="wrap_content"
