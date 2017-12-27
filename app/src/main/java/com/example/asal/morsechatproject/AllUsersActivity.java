@@ -110,7 +110,8 @@ public class AllUsersActivity extends AppCompatActivity {
             TextView status = (TextView)mView.findViewById(R.id.tv_allUsers_status);
             status.setText(user_status);
         }
-        public void setUser_tumb_image(final Context context,final String user_thumb_image) {
+        public void setUser_tumb_image(final Context context,final String user_thumb_image)
+        {
            final CircleImageView thumb_image = (CircleImageView)mView.findViewById(R.id.allUsers_profile_image);
             if(!user_thumb_image.equals("2131165298"))
             {

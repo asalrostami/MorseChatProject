@@ -85,10 +85,9 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
-                       if(dataSnapshot.exists())
-                       {
-                           if(dataSnapshot.hasChild(receiver_user_id))
-                           {
+
+                        if(dataSnapshot.hasChild(receiver_user_id))
+                        {
                                String request_type = dataSnapshot.child(receiver_user_id).child("request_type").getValue().toString();
                                if(request_type.equals("sent"))
                                {
@@ -114,11 +113,9 @@ public class ProfileActivity extends AppCompatActivity {
                                        }
                                    });
                                }
-                           }
-
-                       }
-                       else
-                       {
+                        }
+                        else
+                        {
                            friendReference.child(sender_user_id)
                                    .addListenerForSingleValueEvent(new ValueEventListener() {
                                        @Override
@@ -140,7 +137,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                                        }
                                    });
-                       }
+                        }
                     }
 
                     @Override
@@ -265,12 +262,12 @@ public class ProfileActivity extends AppCompatActivity {
         SimpleDateFormat currentDate = new SimpleDateFormat("dd-MMMM-yyyy");
         final String saveCurrentDate = currentDate.format(calendar.getTime());
 
-        friendReference.child(sender_user_id).child(receiver_user_id).setValue(saveCurrentDate)
+        friendReference.child(sender_user_id).child(receiver_user_id).child("date").setValue(saveCurrentDate)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid)
                     {
-                        friendReference.child(receiver_user_id).child(sender_user_id).setValue(saveCurrentDate)
+                        friendReference.child(receiver_user_id).child(sender_user_id).child("date").setValue(saveCurrentDate)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid)
