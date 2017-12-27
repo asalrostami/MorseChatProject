@@ -49,6 +49,10 @@
             android:parentActivityName=".MainActivity">
         </activity>
         <activity android:name=".ProfileActivity">
+            <intent-filter>
+                <action android:name="com.example.asal.morsechatproject_TARGET_NOTIFICATION"></action>
+                <category android:name="android.intent.category.DEFAULT"></category>
+            </intent-filter>
         </activity>
 
         <service
