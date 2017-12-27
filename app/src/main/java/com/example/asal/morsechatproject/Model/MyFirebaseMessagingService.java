@@ -37,7 +37,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                         .setSmallIcon(R.mipmap.label1)
                         .setContentTitle(notification_title)
-                        .setContentText(notification_body);
+                        .setContentText(notification_body)
+                        .setAutoCancel(true);
+
 
 
 
