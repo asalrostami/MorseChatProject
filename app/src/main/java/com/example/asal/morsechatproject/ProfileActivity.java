@@ -368,7 +368,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 notificationData.put("from",sender_user_id);
                                 notificationData.put("type","request");
 
-                                notificationsDatabaseReference.child(sender_user_id).push().setValue(notificationData)
+                                notificationsDatabaseReference.child(receiver_user_id).push().setValue(notificationData)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task)
