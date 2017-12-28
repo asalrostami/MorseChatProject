@@ -55,7 +55,9 @@ public class FriendsFragment extends Fragment
         online_user_id = mAuth.getCurrentUser().getUid();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Friends").child(online_user_id);
+        mDatabaseReference.keepSynced(true);
         usersReference = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersReference.keepSynced(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         // Inflate the layout for this fragment
         return mMainView;
@@ -89,8 +91,8 @@ public class FriendsFragment extends Fragment
                         String userName = dataSnapshot.child("user_name").getValue().toString();
                         String thumbImage = dataSnapshot.child("user_tumb_image").getValue().toString();
 
-                        FriendsViewHolder.setUserName(userName);
-                        FriendsViewHolder.setThumbImage(thumbImage,getContext());
+                        viewHolder.setUserName(userName);
+                        viewHolder.setThumbImage(thumbImage,getContext());
                     }
 
                     @Override
@@ -106,7 +108,7 @@ public class FriendsFragment extends Fragment
 
     public static class FriendsViewHolder extends RecyclerView.ViewHolder
     {
-        static View mView;
+         View mView;
 
         public FriendsViewHolder(View itemView) {
             super(itemView);
@@ -119,13 +121,13 @@ public class FriendsFragment extends Fragment
             sinceFriendDate.setText(date);
         }
 
-        public static void setUserName(String user_name)
+        public  void setUserName(String user_name)
         {
             TextView userName = (TextView)mView.findViewById(R.id.tv_allUsers_userName);
             userName.setText(user_name);
         }
 
-        public static void setThumbImage(final String thumbImage,final Context context)
+        public  void setThumbImage(final String thumbImage,final Context context)
         {
             final CircleImageView thumb_image = (CircleImageView)mView.findViewById(R.id.allUsers_profile_image);
             if(!thumbImage.equals("2131165298"))
