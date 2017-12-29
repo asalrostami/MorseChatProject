@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_chat"
     tools:context="com.example.asal.morsechatproject.ChatActivity">
 
 
@@ -14,5 +15,41 @@
         layout="@layout/app_bar_layout">
 
     </include>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:background="@color/colorLogo">
+
+        <ImageView
+            android:id="@+id/select_image_chat"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/ic_select_image_to_send"/>
+
+        <EditText
+            android:id="@+id/editText_write_message_chat"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Write Message Here"
+            android:inputType="textMultiLine"
+            android:padding="10dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:srcCompat="@drawable/ic_send_message"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
