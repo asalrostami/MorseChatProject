@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import com.example.asal.morsechatproject.Model.TabsPagerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private TabsPagerAdapter mTabsPagerAdapter;
+    FirebaseUser currentUser;
+    private DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+        currentUser = mFirebaseAuth.getCurrentUser();
+        if(currentUser !=null)
+        {
+            String online_user_id = mFirebaseAuth.getCurrentUser().getUid();
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(online_user_id);
+        }
 
         mToolbar  = (Toolbar)findViewById(R.id.mainPage_toolbar);
         setSupportActionBar(mToolbar);
@@ -50,9 +60,27 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
 
-        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
-        if (currentUser == null) {
+        currentUser = mFirebaseAuth.getCurrentUser();
+        if (currentUser == null)
+        {
            LogoutUser();
+        }
+         else if(currentUser !=null)
+        {
+
+            mDatabaseReference.child("online").setValue(true);
+        }
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        //when the user makes app minimize, status turns into the offline
+        if(currentUser !=null)
+        {
+
+            mDatabaseReference.child("online").setValue(true);
         }
     }
 

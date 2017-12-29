@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.asal.morsechatproject.Model.Friends;
@@ -91,6 +92,12 @@ public class FriendsFragment extends Fragment
                         String userName = dataSnapshot.child("user_name").getValue().toString();
                         String thumbImage = dataSnapshot.child("user_tumb_image").getValue().toString();
 
+                        if(dataSnapshot.hasChild("online"))
+                        {
+                            Boolean online_status = (Boolean) dataSnapshot.child("online").getValue();
+                            viewHolder.setUserOnline(online_status);
+                        }
+
                         viewHolder.setUserName(userName);
                         viewHolder.setThumbImage(thumbImage,getContext());
                     }
@@ -151,6 +158,24 @@ public class FriendsFragment extends Fragment
 
             }
 
+        }
+
+
+        public void setUserOnline(Boolean online_status)
+        {
+
+            ImageView online_statusImage = (ImageView)mView.findViewById(R.id.online_status);
+            if(online_status == true)
+            {
+
+                online_statusImage.setVisibility(View.VISIBLE);
+
+            }
+            else
+            {
+
+                online_statusImage.setVisibility(View.INVISIBLE);
+            }
         }
     }
 }
