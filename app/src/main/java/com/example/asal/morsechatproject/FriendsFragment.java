@@ -1,9 +1,13 @@
 package com.example.asal.morsechatproject;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -83,13 +87,13 @@ public class FriendsFragment extends Fragment
 
                 viewHolder.setDate(model.getDate());
 
-                String list_user_id = getRef(position).getKey();
+                final String list_user_id = getRef(position).getKey();
                 usersReference.child(list_user_id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot)
                     {
 
-                        String userName = dataSnapshot.child("user_name").getValue().toString();
+                        final String userName = dataSnapshot.child("user_name").getValue().toString();
                         String thumbImage = dataSnapshot.child("user_tumb_image").getValue().toString();
 
                         if(dataSnapshot.hasChild("online"))
@@ -100,6 +104,45 @@ public class FriendsFragment extends Fragment
 
                         viewHolder.setUserName(userName);
                         viewHolder.setThumbImage(thumbImage,getContext());
+
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view)
+                            {
+                                CharSequence options[] = new CharSequence[]
+                                        {
+                                                userName + "'s Profile",
+                                                "Send Message"
+
+                                        };
+                                AlertDialog.Builder  builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Select Options");
+                                builder.setItems(options, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int position)
+                                    {
+
+                                        if(position == 0)
+                                        {
+                                            Intent profileIntent = new Intent(getContext(),ProfileActivity.class);
+                                            profileIntent.putExtra("visit_user_id",list_user_id);
+                                            startActivity(profileIntent);
+                                        }
+                                        else if(position == 1)
+                                        {
+                                            Intent chatIntent = new Intent(getContext(),ChatActivity.class);
+                                            chatIntent.putExtra("visit_user_id",list_user_id);
+                                            chatIntent.putExtra("user_name",userName);
+                                            startActivity(chatIntent);
+                                        }
+                                    }
+                                });
+
+                                builder.show();
+
+
+                            }
+                        });
                     }
 
                     @Override
