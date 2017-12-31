@@ -41,7 +41,7 @@ public class ChatActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
 
         messageUserId = getIntent().getExtras().get("visit_user_id").toString();
@@ -52,7 +52,7 @@ public class ChatActivity extends AppCompatActivity
         ActionBar actionBar = getSupportActionBar();
         //add back button on the toolbar
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         LayoutInflater layoutInflater = (LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View action_bar_view = layoutInflater.inflate(R.layout.chat_custom_bar,null);
@@ -63,9 +63,9 @@ public class ChatActivity extends AppCompatActivity
         mTextViewUserLastSeen = (TextView)findViewById(R.id.tv_last_seen_chatBar);
         mCircleImageView = (CircleImageView)findViewById(R.id.image_chatBar);
 
-        mTextViewUserNameTitle.setText(messageUserName);
 
-        rootRef.child("Users").child(messageUserId).addValueEventListener(new ValueEventListener() {
+
+        rootRef.child(messageUserId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -73,6 +73,7 @@ public class ChatActivity extends AppCompatActivity
                 final String online = dataSnapshot.child("online").getValue().toString();
                 final String thumbImage = dataSnapshot.child("user_tumb_image").getValue().toString();
 
+                //Picasso.with(ChatActivity.this).load(thumbImage).centerCrop().placeholder(R.drawable.defaultimage1).into(mCircleImageView);
                 if(!thumbImage.equals("2131165298"))
                 {
                     Picasso.with(ChatActivity.this).load(thumbImage).networkPolicy(NetworkPolicy.OFFLINE).resize(600, 600)
@@ -91,6 +92,7 @@ public class ChatActivity extends AppCompatActivity
                     });
                 }
 
+                mTextViewUserNameTitle.setText(messageUserName);
                 if(online.equals("true"))
                 {
 

@@ -28,7 +28,8 @@ public class AllUsersActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private DatabaseReference mDatabaseReference;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_users);
 
