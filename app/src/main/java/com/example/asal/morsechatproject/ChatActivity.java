@@ -5,34 +5,48 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.asal.morsechatproject.Model.LastSeenTime;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity
 {
-    private String messageUserId;
+    private String messageReceiverId;
     private String messageUserName;
     private Toolbar mToolbar;
 
     private TextView mTextViewUserNameTitle,mTextViewUserLastSeen;
     private CircleImageView mCircleImageView;
 
+    private ImageButton mImageButtonSelectImage,mImageButtonSendMessage;
+    private EditText mEditTextMessage;
+
     private DatabaseReference rootRef;
+    private FirebaseAuth mAuth;
+    private String messageSenderId;
 
 
 
@@ -41,10 +55,13 @@ public class ChatActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        rootRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        rootRef = FirebaseDatabase.getInstance().getReference();
+
+        mAuth = FirebaseAuth.getInstance();
+        messageSenderId = mAuth.getCurrentUser().getUid();
 
 
-        messageUserId = getIntent().getExtras().get("visit_user_id").toString();
+        messageReceiverId = getIntent().getExtras().get("visit_user_id").toString();
         messageUserName = getIntent().getExtras().get("user_name").toString();
 
         mToolbar = (Toolbar)findViewById(R.id.chat_bar_layout);
@@ -63,9 +80,14 @@ public class ChatActivity extends AppCompatActivity
         mTextViewUserLastSeen = (TextView)findViewById(R.id.tv_last_seen_chatBar);
         mCircleImageView = (CircleImageView)findViewById(R.id.image_chatBar);
 
+        mEditTextMessage = (EditText)findViewById(R.id.et_write_message_chat) ;
+        mImageButtonSelectImage = (ImageButton)findViewById(R.id.btn_select_image_chat) ;
+        mImageButtonSendMessage = (ImageButton)findViewById(R.id.btn_send_message_chat);
 
 
-        rootRef.child(messageUserId).addValueEventListener(new ValueEventListener() {
+
+
+        rootRef.child("Users").child(messageReceiverId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
@@ -117,6 +139,63 @@ public class ChatActivity extends AppCompatActivity
 
             }
         });
+
+
+        mImageButtonSendMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+               SendMessage();
+
+            }
+        });
+
+
+
+    }
+
+    private void SendMessage()
+    {
+        String messageText = mEditTextMessage.getText().toString();
+
+        if(TextUtils.isEmpty(messageText))
+        {
+            Toast.makeText(ChatActivity.this,"Please write your message.",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+
+            String message_sender_ref = "Messages/"+ messageSenderId + "/" + messageReceiverId;
+            String message_receiver_ref = "Messages/"+ messageReceiverId + "/" + messageSenderId;
+
+            DatabaseReference user_message_key = rootRef.child("Messages").child(messageSenderId)
+                                                                          .child(messageReceiverId).push();
+
+            String message_push_id = user_message_key.getKey();
+
+            Map messageTextBody = new HashMap();
+            messageTextBody.put("message",messageText);
+            messageTextBody.put("seen",false);
+            messageTextBody.put("type","text");
+            messageTextBody.put("time", ServerValue.TIMESTAMP);
+
+            Map messageBodyDetails = new HashMap();
+            messageBodyDetails.put(message_sender_ref + "/" + message_push_id ,messageTextBody);
+            messageBodyDetails.put(message_receiver_ref + "/" + message_push_id ,messageTextBody);
+
+            rootRef.updateChildren(messageBodyDetails, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference)
+                {
+                    if(databaseError != null)
+                    {
+                        Log.d("Chat_Log",databaseError.getMessage().toString());
+                    }
+
+                    mEditTextMessage.setText("");
+                }
+            });
+        }
 
 
     }

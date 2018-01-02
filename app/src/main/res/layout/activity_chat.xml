@@ -26,15 +26,15 @@
         android:layout_alignParentLeft="true"
         android:background="@color/colorLogo">
 
-        <ImageView
-            android:id="@+id/select_image_chat"
+        <ImageButton
+            android:id="@+id/btn_select_image_chat"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:src="@drawable/ic_select_image_to_send"/>
 
         <EditText
-            android:id="@+id/editText_write_message_chat"
+            android:id="@+id/et_write_message_chat"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -43,7 +43,8 @@
             android:inputType="textMultiLine"
             android:padding="10dp"/>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/btn_send_message_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
