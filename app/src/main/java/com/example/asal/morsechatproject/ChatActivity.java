@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +18,10 @@ import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.example.asal.morsechatproject.Model.LastSeenTime;
+import com.example.asal.morsechatproject.Model.Message;
+import com.example.asal.morsechatproject.Model.MessageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +32,9 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -43,10 +50,14 @@ public class ChatActivity extends AppCompatActivity
 
     private ImageButton mImageButtonSelectImage,mImageButtonSendMessage;
     private EditText mEditTextMessage;
+    private RecyclerView userMessagesList;
 
     private DatabaseReference rootRef;
     private FirebaseAuth mAuth;
     private String messageSenderId;
+    private final List<Message> messageList = new ArrayList<>();
+    private LinearLayoutManager mLayoutManager;
+    private MessageAdapter mMessageAdapter;
 
 
 
@@ -84,7 +95,18 @@ public class ChatActivity extends AppCompatActivity
         mImageButtonSelectImage = (ImageButton)findViewById(R.id.btn_select_image_chat) ;
         mImageButtonSendMessage = (ImageButton)findViewById(R.id.btn_send_message_chat);
 
+        mMessageAdapter = new MessageAdapter(messageList);
 
+        userMessagesList = (RecyclerView)findViewById(R.id.recyclerView_messagesList_chat) ;
+
+
+        mLayoutManager = new LinearLayoutManager(this);
+        userMessagesList.setHasFixedSize(true);
+        userMessagesList.setLayoutManager(mLayoutManager);
+
+        userMessagesList.setAdapter(mMessageAdapter);
+
+        FetchMessages();
 
 
         rootRef.child("Users").child(messageReceiverId).addValueEventListener(new ValueEventListener() {
@@ -152,6 +174,41 @@ public class ChatActivity extends AppCompatActivity
 
 
 
+    }
+
+    private void FetchMessages()
+    {
+        rootRef.child("Messages").child(messageSenderId).child(messageReceiverId)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s)
+                    {
+
+                        Message message = dataSnapshot.getValue(Message.class);
+                        messageList.add(message);
+                        mMessageAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void SendMessage()

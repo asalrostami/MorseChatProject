@@ -16,6 +16,16 @@
 
     </include>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView_messagesList_chat"
+        android:layout_width="match_parent"
+        android:layout_height="460dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/chat_bar_layout">
+
+    </android.support.v7.widget.RecyclerView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +34,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:background="@color/colorLogo">
+        android:background="@color/colorLogo"
+        android:id="@+id/linearLayout">
 
         <ImageButton
             android:id="@+id/btn_select_image_chat"
