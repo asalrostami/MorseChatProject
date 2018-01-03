@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.asal.morsechatproject.Model.Chats;
 import com.example.asal.morsechatproject.Model.Friends;
+import com.example.asal.morsechatproject.Model.MyDividerItemDecoration;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,6 +68,9 @@ public class ChatsFragment extends Fragment {
         linearLayoutManager.setReverseLayout(true);
         linearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        //add divider in recyclerView by custom divider
+        mRecyclerView.addItemDecoration(new MyDividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL, 16));
+
         // Inflate the layout for this fragment
         return myMainView;
     }

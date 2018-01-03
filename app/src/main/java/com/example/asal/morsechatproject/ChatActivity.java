@@ -104,6 +104,7 @@ public class ChatActivity extends AppCompatActivity
         userMessagesList.setHasFixedSize(true);
         userMessagesList.setLayoutManager(mLayoutManager);
 
+
         userMessagesList.setAdapter(mMessageAdapter);
 
         FetchMessages();
