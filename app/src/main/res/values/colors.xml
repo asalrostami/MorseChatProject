@@ -8,5 +8,6 @@
     <color name="colorButtonText">#f47e54</color>
     <color name="background_profile">#313335</color>
     <color name="background_chat">#c4c2c2</color>
+    <color name="retreive_message">#b7e698</color>
 
 </resources>

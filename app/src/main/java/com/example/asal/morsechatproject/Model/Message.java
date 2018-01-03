@@ -10,16 +10,27 @@ public class Message
     private boolean seen;
     private long time;
     private String type;
+    private String from;
 
     public Message()
     {
     }
 
-    public Message(String message, boolean seen, long time, String type) {
+    public Message(String message, boolean seen, long time, String type ,String from)
+    {
         this.message = message;
         this.seen = seen;
         this.time = time;
         this.type = type;
+        this.from = from;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 
     public String getMessage() {
