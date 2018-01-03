@@ -189,7 +189,7 @@ public class FriendsFragment extends Fragment
         public void setDate(String date)
         {
             TextView sinceFriendDate = (TextView)mView.findViewById(R.id.tv_allUsers_status);
-            sinceFriendDate.setText(date);
+            sinceFriendDate.setText("Friends seen : \n"+ date);
         }
 
         public  void setUserName(String user_name)
